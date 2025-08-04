@@ -1,6 +1,4 @@
 # Prompt_AI
-Prompt_AI
-
 
 - Provides a frontend interface for prompting various AI models via the OpenRouter API.
 
