@@ -47,22 +47,11 @@
         <div class="mb-3">
             <label for="model" class="form-label">Choose a Model</label>
             <select name="model" id="model" class="form-select">
-                <option value="deepseek/deepseek-chat-v3-0324:free"
-                    {{ old('model', 'deepseek/deepseek-chat-v3-0324:free') === 'deepseek/deepseek-chat-v3-0324:free' ? 'selected' : '' }}>
-                    🧠 DeepSeek Chat V3 (0324)
-                </option>
-                <option value="qwen/qwen3-coder:free"
-                    {{ old('model') === 'qwen/qwen3-coder:free' ? 'selected' : '' }}>
-                    💻 Qwen3 Coder
-                </option>
-                <option value="z-ai/glm-4.5-air:free"
-                    {{ old('model') === 'z-ai/glm-4.5-air:free' ? 'selected' : '' }}>
-                    🌬️ Z.AI GLM 4.5 Air
-                </option>
-                <option value="mistralai/mistral-small-3.1-24b-instruct:free"
-                    {{ old('model') === 'mistralai/mistral-small-3.1-24b-instruct:free' ? 'selected' : '' }}>
-                    📏 Mistral Small 3.1 24B
-                </option>
+                @foreach($models as $value => $label)
+                    <option value="{{ $value }}" {{ old('model') === $value ? 'selected' : '' }}>
+                        {{ $label }}
+                    </option>
+                @endforeach
             </select>
         </div>
         <div class="mb-3">
@@ -71,7 +60,11 @@
         </div>
         <div class="mb-3">
             <label for="prompt" class="form-label">Enter Your Prompt</label>
-            <textarea name="prompt" id="prompt" rows="2" class="form-control">{{ old('prompt', $prompt ?? '') }}</textarea>
+            <textarea name="prompt" id="prompt" rows="2" class="form-control" required>{{ old('prompt', $prompt ?? '') }}</textarea>
+        </div>
+        <div class="form-check mb-3">
+            <input class="form-check-input" id="use_testdata_checkbox" type="checkbox" name="use_testdata_checkbox" value="1" {{ old('use_testdata_checkbox') ? 'checked' : '' }}>
+            <label class="form-check-label" for="use_testdata_checkbox">Query Test Data</label>
         </div>
         <a href="/" class="btn btn-outline-dark btn-sm text-decoration-none px-2">Back</a>
         <button type="submit" class="btn btn-outline-success btn-sm">Submit</button>
@@ -91,6 +84,8 @@ document.getElementById('ai-form').addEventListener('submit', function (e) {
     const model = document.getElementById('model').value;
     const dataset = document.getElementById('dataset').value;
     const prompt = document.getElementById('prompt').value;
+    const queryjsonCheckbox = document.getElementById('use_testdata_checkbox');
+    const queryjson = queryjsonCheckbox.checked; // true or false
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const spinner = document.getElementById('loading-spinner');
     const sendBtn = this.querySelector('button[type="submit"]');
@@ -107,7 +102,8 @@ document.getElementById('ai-form').addEventListener('submit', function (e) {
         body: JSON.stringify({
             model: model,
             dataset: dataset,
-            prompt: prompt
+            prompt: prompt,
+            use_testdata_checkbox: queryjson ? 1 : 0
         })
     })
     .then(response => response.json())
@@ -125,7 +121,7 @@ document.getElementById('ai-form').addEventListener('submit', function (e) {
         div.innerHTML = `
             <strong>Prompt:</strong> ${data.prompt}
             <hr/>
-            <strong>Response:</strong><br/>
+            <strong>Response</strong> <span class='text-success'>[${data.model}]</span><strong>:</strong><br/>
             ${formattedMessage}
         `;
         container.prepend(div);
