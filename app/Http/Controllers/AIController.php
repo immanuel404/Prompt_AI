@@ -10,7 +10,7 @@ class AIController extends Controller
 {
 
     // use Test Database(emulate db)
-    public function getTestData()
+    private function getTestData()
     {
         return collect([
             ['id' => 1, 'name' => 'John Doe', 'total_sales' => 120],
@@ -18,7 +18,10 @@ class AIController extends Controller
             ['id' => 3, 'name' => 'Alex Johnson', 'total_sales' => 130],
             ['id' => 4, 'name' => 'Emily Brown', 'total_sales' => 75],
             ['id' => 5, 'name' => 'Chris Davis', 'total_sales' => 110],
-        ]);
+        ])->map(function ($item) {
+            unset($item['id']); // remove 'id' field
+            return $item;
+        });
     }
 
 
@@ -31,6 +34,46 @@ class AIController extends Controller
             'mistralai/mistral-small-3.1-24b-instruct:free' => '📏 Mistral Small 3.1 24B',
             'z-ai/glm-4.5-air:free' => '🌬️ Z.AI GLM 4.5 Air',
         ];
+    }
+
+
+    // format data
+    private function formatQueryData($data): string
+    {
+        if (is_string($data) || is_numeric($data)) {
+            return (string) $data;
+        }
+
+        if (empty($data)) {
+            return 'No data matches your query.';
+        }
+
+        $collection = collect($data);
+
+        if ($collection->isEmpty()) {
+            return 'No data matches your query.';
+        }
+
+        return $collection->map(function ($item) {
+
+            if (is_array($item)) {
+                return implode("\n", array_map(
+                    fn($k, $v) => ucfirst($k) . ': ' . $v,
+                    array_keys($item),
+                    $item
+                ));
+            }
+
+            if (is_object($item)) {
+                $vars = get_object_vars($item);
+                return implode("\n", array_map(
+                    fn($k) => ucfirst($k) . ': ' . $item->$k,
+                    array_keys($vars)
+                ));
+            }
+
+            return (string) $item;
+        })->implode("\n\n---\n\n"); // separator between records
     }
 
 
@@ -125,10 +168,9 @@ class AIController extends Controller
                     default => null,
                 };
 
-                // return the result as json string
+                // return and format result
                 if ($query_data !== null) {
-                    $message = is_string($query_data) ? $query_data : json_encode($query_data);
-                    $message = $message=="[]" ? "No data matches your query" : $message;
+                    $message = $this->formatQueryData($query_data);
                 } else {
                     $message = "Sorry, I'm not able to process your query at this time.";
                 }

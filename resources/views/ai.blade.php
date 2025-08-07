@@ -134,6 +134,10 @@ document.getElementById('ai-form').addEventListener('submit', function (e) {
         // Clear the form fields after a successful submission
         document.getElementById('dataset').value = '';
         document.getElementById('prompt').value = '';
+
+        if(data.error) {
+            console.error('Error:', data.error);
+        }
     })
     .catch(error => {
         console.error('Error:', error);
