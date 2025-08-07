@@ -1,5 +1,6 @@
 # Prompt_AI
-Laravel12 | OpenRouter
+Laravel12 | OpenRouter |
+Provides a frontend interface for prompting various AI models via the OpenRouter API.
 
 - Choose from a selection of available AI models.
 
