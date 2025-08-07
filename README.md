@@ -5,7 +5,7 @@ Laravel12 | OpenRouter
 
 - Submit a prompt and see the response displayed dynamically on the same page.
 
-- #get an API key from the OpenRouter website
+- #get an API key from the OpenRouter website.
 
 
 <br/>
