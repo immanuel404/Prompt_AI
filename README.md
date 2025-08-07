@@ -1,9 +1,9 @@
 # Prompt_AI
 Laravel12 | OpenRouter
 
-- Choose from a wide range of available AI models supported by OpenRouter.
+- Choose from a selection of available AI models.
 
-- Submit a prompt and see the response displayed dynamically on the same page.
+- Submit a prompt and see responses displayed dynamically.
 
 - #get an API key from the OpenRouter website.
 
