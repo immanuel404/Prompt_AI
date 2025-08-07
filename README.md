@@ -1,10 +1,11 @@
 # Prompt_AI
+Laravel12 | OpenRouter
 
-- Provides a frontend interface for prompting various AI models via the OpenRouter API.
+- Choose from a wide range of available AI models supported by OpenRouter.
 
-- Select an AI model and submit a prompt, with the response being displayed on the same page.
+- Submit a prompt and see the response displayed dynamically on the same page.
 
-- #get key from the OpenRouterAI website.
+- #get an API key from the OpenRouter website
 
 
 <br/>
