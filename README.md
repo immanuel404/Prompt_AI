@@ -4,7 +4,7 @@ Provides an interface for prompting various AI models via the OpenRouter API.
 
 - Choose from a selection of available AI models and enter prompt.
 
-- #get API key from the OpenRouter website.
+- #Obtain API key from the OpenRouter website.
 
 <br/>
 
